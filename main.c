@@ -18,7 +18,8 @@ int main()
     int running = 1;
     SDL_Event event;
 
-    int x = 300;
+    float x = 300.0f;
+    float velocity = 0.1f;
 
     while (running)
     {
@@ -36,14 +37,19 @@ int main()
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
         SDL_Rect rect;
-        rect.x = x;
+        rect.x = (int)x;
         rect.y = 200;
         rect.w = 200;
         rect.h = 150;
 
         SDL_RenderFillRect(renderer, &rect);
 
-        x += 1;
+        x += velocity;
+
+        if (x <= 0 || x + 200 >=800)
+        {
+        	velocity = -velocity;
+        }
 
         SDL_RenderPresent(renderer);
     }
