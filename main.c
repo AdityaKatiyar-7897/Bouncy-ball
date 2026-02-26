@@ -18,6 +18,8 @@ int main()
     int running = 1;
     SDL_Event event;
 
+    int x = 300;
+
     while (running)
     {
         while (SDL_PollEvent(&event))
@@ -34,12 +36,14 @@ int main()
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
         SDL_Rect rect;
-        rect.x = 300;
+        rect.x = x;
         rect.y = 200;
         rect.w = 200;
         rect.h = 150;
 
         SDL_RenderFillRect(renderer, &rect);
+
+        x += 1;
 
         SDL_RenderPresent(renderer);
     }
