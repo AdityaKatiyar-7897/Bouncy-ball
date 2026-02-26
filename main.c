@@ -13,6 +13,8 @@ int main()
         0
     );
 
+    SDL_Renderer* renderer =SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
     int running = 1;
     SDL_Event event;
 
@@ -25,6 +27,21 @@ int main()
                 running = 0;
             }
         }
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+        SDL_Rect rect;
+        rect.x = 300;
+        rect.y = 200;
+        rect.w = 200;
+        rect.h = 150;
+
+        SDL_RenderFillRect(renderer, &rect);
+
+        SDL_RenderPresent(renderer);
     }
 
     SDL_DestroyWindow(window);
