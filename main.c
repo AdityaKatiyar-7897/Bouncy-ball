@@ -13,55 +13,66 @@ int main()
         0
     );
 
-    SDL_Renderer* renderer =SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* renderer = SDL_CreateRenderer(
+        window,
+        -1,
+        SDL_RENDERER_ACCELERATED
+    );
 
     int running = 1;
     SDL_Event event;
 
-    float x = 300.0f;
-    float velocity = 0.5f;
+    float cx = 400.0f;     // center x (float for smooth movement)
+    int cy = 300;          // center y
+    int radius = 80;
 
-    int width = 200;
-    int height = 150;
-    int top = 200;
+    float velocity = 1.0f; // horizontal speed
 
     while (running)
     {
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
-            {
                 running = 0;
-            }
         }
 
+        // Clear screen
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
+        // Ball color
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
-        int left = (int)x;
+        int draw_cx = (int)cx;
 
-        for (int y_pos = top; y_pos < top + height;y_pos++)
+        // Draw filled circle manually
+        for (int y = cy - radius; y <= cy + radius; y++)
         {
-        	for (int x_pos = left; x_pos < left + width; x_pos++)
-        	{
-        		SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-        	}
+            for (int x = draw_cx - radius; x <= draw_cx + radius; x++)
+            {
+                int dx = x - draw_cx;
+                int dy = y - cy;
+
+                if (dx * dx + dy * dy <= radius * radius)
+                {
+                    SDL_RenderDrawPoint(renderer, x, y);
+                }
+            }
         }
 
-       
+        // Update position
+        cx += velocity;
 
-        x += velocity;
-
-        if (x <= 0 || x + 200 >=800)
+        // Bounce logic (correct boundary check)
+        if (cx - radius <= 0 || cx + radius >= 800)
         {
-        	velocity = -velocity;
+            velocity = -velocity;
         }
 
         SDL_RenderPresent(renderer);
     }
 
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
