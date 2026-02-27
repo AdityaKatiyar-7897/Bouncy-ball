@@ -2,10 +2,12 @@
 
 int main()
 {
+    // 1. Initialize SDL
     SDL_Init(SDL_INIT_VIDEO);
 
+    // 2. Create window
     SDL_Window* window = SDL_CreateWindow(
-        "Bouncy Ball Simulation",
+        "Mouse Ball",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         800,
@@ -13,6 +15,7 @@ int main()
         0
     );
 
+    // 3. Create renderer (our drawing tool)
     SDL_Renderer* renderer = SDL_CreateRenderer(
         window,
         -1,
@@ -22,35 +25,40 @@ int main()
     int running = 1;
     SDL_Event event;
 
-    float cx = 400.0f;     // center x (float for smooth movement)
-    int cy = 300;          // center y
-    int radius = 80;
-
-    float velocity = 1.0f; // horizontal speed
+    // Ball center position
+    int cx = 400;
+    int cy = 300;
+    int radius = 40;
 
     while (running)
     {
+        // --- Handle Events ---
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
+            {
                 running = 0;
+            }
+
+            if (event.type == SDL_MOUSEMOTION)
+            {
+                cx = event.motion.x;
+                cy = event.motion.y;
+            }
         }
 
-        // Clear screen
+        // --- Clear Screen ---
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Ball color
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        // --- Draw Ball ---
+        SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
 
-        int draw_cx = (int)cx;
-
-        // Draw filled circle manually
         for (int y = cy - radius; y <= cy + radius; y++)
         {
-            for (int x = draw_cx - radius; x <= draw_cx + radius; x++)
+            for (int x = cx - radius; x <= cx + radius; x++)
             {
-                int dx = x - draw_cx;
+                int dx = x - cx;
                 int dy = y - cy;
 
                 if (dx * dx + dy * dy <= radius * radius)
@@ -60,15 +68,7 @@ int main()
             }
         }
 
-        // Update position
-        cx += velocity;
-
-        // Bounce logic (correct boundary check)
-        if (cx - radius <= 0 || cx + radius >= 800)
-        {
-            velocity = -velocity;
-        }
-
+        // --- Show Frame ---
         SDL_RenderPresent(renderer);
     }
 
