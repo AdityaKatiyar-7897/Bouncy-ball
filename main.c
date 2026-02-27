@@ -19,7 +19,11 @@ int main()
     SDL_Event event;
 
     float x = 300.0f;
-    float velocity = 0.1f;
+    float velocity = 0.5f;
+
+    int width = 200;
+    int height = 150;
+    int top = 200;
 
     while (running)
     {
@@ -36,13 +40,17 @@ int main()
 
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
-        SDL_Rect rect;
-        rect.x = (int)x;
-        rect.y = 200;
-        rect.w = 200;
-        rect.h = 150;
+        int left = (int)x;
 
-        SDL_RenderFillRect(renderer, &rect);
+        for (int y_pos = top; y_pos < top + height;y_pos++)
+        {
+        	for (int x_pos = left; x_pos < left + width; x_pos++)
+        	{
+        		SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+        	}
+        }
+
+       
 
         x += velocity;
 
